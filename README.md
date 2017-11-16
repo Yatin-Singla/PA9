@@ -2,3 +2,4 @@
 
 
 It's lit fam.
+Learning how to use Git.
