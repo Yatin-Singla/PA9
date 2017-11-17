@@ -377,3 +377,7 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+*.json
+*.plist
+PA9.dSYM/Contents/Resources/DWARF/PA9
+PA9
