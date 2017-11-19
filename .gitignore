@@ -381,3 +381,6 @@ __pycache__/
 *.plist
 PA9.dSYM/Contents/Resources/DWARF/PA9
 PA9
+*.sln
+*.vcxproj
+*.filters
