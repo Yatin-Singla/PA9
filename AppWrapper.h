@@ -30,8 +30,6 @@ private:
 	//Playground using squares
 	void SquaresPlayground();
 
-	//Opens a new window for graphics in fullscreen if the device supports it,
-	//hard-coded size if not
-	void CreateNewWindow(sf::RenderWindow &window, sf::VideoMode &screenResolution, string windowTitle);
+
 };
 
