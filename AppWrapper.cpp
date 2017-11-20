@@ -61,5 +61,61 @@ void AppWrapper::DisplayMenu() {
 
 }
 
+void AppWrapper::SquaresPlayground() {
 
+	//Declare a RenderWindow object
+	sf::RenderWindow window;
+
+	//returns VideoMode for current display resolution of the device being used
+	sf::VideoMode deviceScreenResolution = sf::VideoMode::getDesktopMode();
+
+	//create the window
+	this->CreateNewWindow(window, deviceScreenResolution, "Sqaures Playground");
+	
+
+	//think this is where I will call the shape draing algo..
+	//coming back to this tomorrow
+	//...
+
+	//
+	//Testing
+	//
+	while (window.isOpen())
+	{
+		//polling of events.. may find use elsewhere
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+
+		window.clear();
+		
+		window.display();
+	}
+	//
+	//Testing
+	//
+
+	
+}
+
+void AppWrapper::CreateNewWindow(sf::RenderWindow &window, sf::VideoMode &screenResolution, string windowTitle) {
+
+	if (screenResolution.isValid()) {
+
+		//Create a window at full resolution capability/size	
+		window.create(screenResolution, windowTitle);
+
+	}
+	else {
+
+		//invalid window size, create a window with a hard-coded size
+		window.create(sf::VideoMode(600, 600), windowTitle);
+
+	}
+	
+}
 
