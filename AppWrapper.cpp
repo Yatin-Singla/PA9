@@ -7,8 +7,10 @@ AppWrapper::AppWrapper()
 
 void AppWrapper::StartApplication() {
 
-	//just calls the display menu function..
-	//may do some other inits later, we'll see
+	//init for rand
+	srand(time(NULL));
+
+	//call the menu function
 	this->DisplayMenu();
 
 }
@@ -71,35 +73,19 @@ void AppWrapper::SquaresPlayground() {
 
 	//create the window
 	this->CreateNewWindow(window, deviceScreenResolution, "Sqaures Playground");
-	
 
-	//think this is where I will call the shape draing algo..
-	//coming back to this tomorrow
-	//...
+	//create the array of 50 squares with already randomized values 
+	DropcolorSquare squares1[50];
 
-	//
-	//Testing
-	//
-	while (window.isOpen())
-	{
-		//polling of events.. may find use elsewhere
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+	DropcolorSquare squares2[50];
 
 
-		window.clear();
-		
-		window.display();
-	}
-	//
-	//Testing
-	//
 
-	
+	//pass to a drawing algo?
+	//pattern for drawing (to look like movement) is clear, draw, display
+	this->DoubleDropColor(window, squares1, squares2);
+
+
 }
 
 void AppWrapper::CreateNewWindow(sf::RenderWindow &window, sf::VideoMode &screenResolution, string windowTitle) {
@@ -116,6 +102,155 @@ void AppWrapper::CreateNewWindow(sf::RenderWindow &window, sf::VideoMode &screen
 		window.create(sf::VideoMode(600, 600), windowTitle);
 
 	}
-	
+
 }
+
+void AppWrapper::DropColor(sf::RenderWindow &window, DropcolorSquare squares[50]) {
+
+	//variable to track X position of printing
+	int printPos = 0;
+
+	
+	for (int i = 0; i < 50; i++) {
+
+		//start at (0,0), move right 1 side length each loop
+		squares[i].SetPosition(printPos, 0);
+
+		int dropLength = squares[i].GetDropLength();
+
+		//vertical drop loop
+		for (int j = 0; j < dropLength; j+=2) {
+			
+			squares[i].SetPosition(printPos, j);
+			 
+			window.draw(squares[i]);
+
+			window.display();
+
+		}
+
+		printPos += squares[i].GetSideLength();
+
+	}
+
+
+}
+
+void AppWrapper::DoubleDropColor(sf::RenderWindow &window, DropcolorSquare squares1[50], DropcolorSquare squares2[50]) {
+
+	//variable to track X position of printing
+	int printPos = 0;
+
+	//Top half of the visual
+	for (int i = 0; i < 50; i++) {
+
+		//start at (0,0), move right 1 side length each loop
+		squares1[i].SetPosition(printPos, 0);
+
+		int dropLength = squares1[i].GetDropLength();
+
+		//vertical drop loop
+		for (int j = 0; j < dropLength; j += 2) {
+
+			squares1[i].SetPosition(printPos, j);
+
+			window.draw(squares1[i]);
+
+			window.display();
+
+		}
+
+		printPos += squares1[i].GetSideLength();
+
+	}
+
+	printPos = 0;
+
+	//the furthest down on the screen we want to print
+	int pos2 = squares2[0].getSize().x * 49;
+
+
+	for (int i = 0; i < 50; i++) {
+
+		//start at (0,0), move right 1 side length each loop
+		squares2[i].SetPosition(printPos, pos2);
+
+
+		int dropLength = squares2[i].GetDropLength();
+
+		//vertical drop loop
+		for (int j = pos2; j > (pos2 - dropLength); j -= 2) {
+
+			squares2[i].SetPosition(printPos, j);
+
+			window.draw(squares2[i]);
+
+			window.display();
+
+		}
+
+		printPos += squares2[i].GetSideLength();
+
+	}
+
+}
+
+
+
+
+
+	
+	/*sf::RectangleShape squares[50];
+
+
+	sf::RectangleShape rect;
+
+	rect.setSize(sf::Vector2f(50, 40));
+	
+	rect.setFillColor(sf::Color::White);*/
+
+	
+	//pattern for drawing is clear, draw, display
+
+	//for (int i = 0; i < 1000; i++) {
+
+	//	//rect.setPosition(0, i);
+
+	//	window.clear();
+	//	
+	//	//window.draw(rect);
+
+	//	window.display();
+	//	
+	//	
+
+	//}
+
+	//
+	//Testing
+	//
+	//while (window.isOpen())
+	//{
+	//	//polling of events.. may find use elsewhere
+	//	sf::Event event;
+	//	while (window.pollEvent(event))
+	//	{
+	//		if (event.type == sf::Event::Closed)
+	//			window.close();
+	//	}
+
+
+	//	window.clear();
+	//	
+	//	window.display();
+	//}
+	//
+	//End Test
+	//
+
+	
+
+
+
+
 
