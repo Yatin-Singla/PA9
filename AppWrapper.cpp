@@ -239,6 +239,8 @@ void AppWrapper::CirclesPlayground() {
 	this->CreateNewWindow(window, deviceScreenResolution, "Circles Playground");
 
 	//Do the dance
+	//currently this one sucks, but will continue to tweak..
+	//possibly with more data points or value manipulation
 	this->Untitled(window);
 }
 
@@ -248,24 +250,40 @@ void AppWrapper::Untitled(sf::RenderWindow &window) {
 	//the array of monthly lightning strike data
 	Month Year2001[12];
 	
+	//the array of circles that will correspond to the strike data
+	MonthCircle circles[12];
+
+	
+
 
 	//read the data from the file into the array of month data
 	if (InitializeMonthArray(Year2001)) {
 
-		//
-		// Testing
-		//
+		//initialize the circle array with the month data
+		InitializeCircleArray(circles, Year2001);
+
+		//draw the circles
 		for (int i = 0; i < 12; i++) {
 
-			cout << "Month: " << Year2001[i].GetMonthTitle() << " Number of strikes: " << Year2001[i].GetNumberOfStrikes() << endl;
+			window.draw(circles[i]);
 
+		
 		}
-		//
-		// Testing
-		//
 
-	}
-	else {
+		//display the window
+		window.display();
+
+		//necessary to keep the window open and not crash the program during/after execution
+		while (window.isOpen()) {
+			//polling of events.. may find use elsewhere
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
+			}
+		}
+	}else {
 
 		//display error message and pause for acknowledgement
 		system("cls");
@@ -325,8 +343,57 @@ bool AppWrapper::InitializeMonthArray(Month passedMonthArray[12]) {
 }
 
 
+void AppWrapper::InitializeCircleArray(MonthCircle passedCircleArray[12], Month passedMonthArray[12]) {
+
+	int Xpos = 0;
+
+	for (int i = 0; i < 12; i++) {
+
+		//set the max radius of the circle at position i to 1/3 of the number of strikes 
+		//in month i
+		passedCircleArray[i].SetMaxRadius((float) (passedMonthArray[i].GetNumberOfStrikes() / 100));
+
+		//setting position
+		passedCircleArray[i].setPosition(sf::Vector2f((float)Xpos, 1000));
+
+		//setting size
+		passedCircleArray[i].setRadius(passedCircleArray[i].GetMaxRadius());
+
+		//setting color
+		if (i % 2 == 0) {
+
+			//crimson
+			passedCircleArray[i].setFillColor(sf::Color(153, 0, 0));
+
+		}else {
+
+			//grey
+			passedCircleArray[i].setFillColor(sf::Color(128, 128, 128));
+
+		}
+		
+		Xpos += 200;
+	}
 
 
+	
+	
+
+}
+
+
+////
+//// Testing
+////
+//for (int i = 0; i < 12; i++) {
+
+//	cout << "Circle: " << i << " Max Radius: " << passedCircleArray[i].GetMaxRadius() << endl;
+//	//initialize the circle array with the month data
+
+//}
+////
+//// Testing
+////
 	
 	/*sf::RectangleShape squares[50];
 

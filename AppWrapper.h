@@ -9,6 +9,7 @@
 
 #include "DropcolorSquare.h"
 #include "Month.h"
+#include "MonthCircle.h"
 
 using std::cout;
 using std::cin;
@@ -53,5 +54,7 @@ private:
 	void Untitled(sf::RenderWindow &window);
 
 	bool InitializeMonthArray(Month passedMonthArray[12]);
+
+	void InitializeCircleArray(MonthCircle passedCircleArray[12], Month passedMonthArray[12]);
 };
 
