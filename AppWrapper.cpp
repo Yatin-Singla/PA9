@@ -241,6 +241,7 @@ void AppWrapper::CirclesPlayground() {
 	//Do the dance
 	//currently this one sucks, but will continue to tweak..
 	//possibly with more data points or value manipulation
+
 	this->Untitled(window);
 }
 
