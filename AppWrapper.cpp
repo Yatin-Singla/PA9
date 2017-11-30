@@ -303,12 +303,26 @@ bool AppWrapper::InitializeMonthArray(Month passedMonthArray[12]) {
 	//declare the ifstream that holds the strike data
 	ifstream strikeData("lightning-strikes.csv");
 
+	//running longitude total
+	double longitudeTotal = 0.0;
+
+	//running latitude total
+	double latitudeTotal = 0.0;
+
+	//running strike count	
+	int strikeCount = 0;
+
+
+
 	if (strikeData.is_open()) {
 
 		//worker variable used to get non-useful information when needed
 		string trash = "";
+		char ctrash = '\0';
 
 		int currentMonth = 0;
+		double currentLongitude = 0.0;
+		double currentLatitude = 0.0;
 
 		//header info for the data
 		getline(strikeData, trash);
@@ -317,7 +331,15 @@ bool AppWrapper::InitializeMonthArray(Month passedMonthArray[12]) {
 		//continue to loop until stream reaches the end
 		while (!strikeData.eof()) {
 
+			//the longitude
+			strikeData >> currentLongitude;
+
+			//the latitude
+			strikeData >> ctrash;
+			strikeData >> currentLatitude;
+
 			//the year
+			strikeData >> ctrash;
 			getline(strikeData, trash, ',');
 
 			//the month
@@ -326,13 +348,39 @@ bool AppWrapper::InitializeMonthArray(Month passedMonthArray[12]) {
 			//if the title hasn't already been assigned, assign int
 			if (passedMonthArray[currentMonth -1].GetMonthTitle() == 0) {
 
+				//compute and assign the averages for the previous month
+				//only if we have monthly data to compute
+				if (currentMonth > 1) {
+
+					passedMonthArray[currentMonth - 2].SetAvgLongitude((longitudeTotal / strikeCount));
+
+					passedMonthArray[currentMonth - 2].SetAvgLatitude((latitudeTotal / strikeCount));
+
+					passedMonthArray[currentMonth - 2].SetNumberOfStrikes(strikeCount);
+				}
+				
+				//reset the varibles needed for averages
+				longitudeTotal = 0.0;
+				latitudeTotal = 0.0;
+				strikeCount = 0;
+
+				//assign the month number to the current month
 				passedMonthArray[currentMonth -1].SetMonthTitle(currentMonth);
 
 			}
 
 			//add one more strike to the current month
-			passedMonthArray[currentMonth -1].SetNumberOfStrikes(passedMonthArray[currentMonth - 1].GetNumberOfStrikes() + 1);
+			//passedMonthArray[currentMonth -1].SetNumberOfStrikes(passedMonthArray[currentMonth - 1].GetNumberOfStrikes() + 1);
+			
+			//add to the running totals
+			strikeCount += 1;
+			longitudeTotal += currentLongitude;
+			latitudeTotal += currentLatitude;
+
 		}
+
+		
+
 
 		//update success for process
 		success = true;
@@ -352,7 +400,7 @@ void AppWrapper::InitializeCircleArray(MonthCircle passedCircleArray[12], Month 
 
 		//set the max radius of the circle at position i to 1/3 of the number of strikes 
 		//in month i
-		passedCircleArray[i].SetMaxRadius((float) (passedMonthArray[i].GetNumberOfStrikes() / 100));
+		passedCircleArray[i].SetMaxRadius((float) (passedMonthArray[i].GetNumberOfStrikes() / 75));
 
 		//setting position
 		passedCircleArray[i].setPosition(sf::Vector2f((float)Xpos, 1000));
